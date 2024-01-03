@@ -96,9 +96,26 @@ namespace BEComentarios.Controllers
         }
 
         // DELETE api/<ComentarioController>/5
+        //Eliminar comentario por id
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                var comentario = await _context.Comentario.FindAsync(id);
+
+                if (comentario == null)
+                {
+                    return NotFound();
+                }
+                _context.Comentario.Remove(comentario);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Comentario eliminado con éxito!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
