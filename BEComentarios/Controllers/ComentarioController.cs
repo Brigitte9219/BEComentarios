@@ -36,9 +36,22 @@ namespace BEComentarios.Controllers
 
         // GET api/<ComentarioController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            try
+            {
+                var comentario = await _context.Comentario.FindAsync(id);
+
+                if (comentario == null)
+                {
+                    return NotFound();
+                }
+                return Ok(comentario);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/<ComentarioController>
